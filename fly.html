@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="utf8">
+  </head>
+  <script type="text/javascript">
+    var words = [
+      'shit屎',
+      'communication<br>交际',
+      'heaven天堂',
+      'million百万',
+      'swan天鹅',
+      'love爱',
+    ]
+  </script>
+  <style type="text/css">
+    html,body {
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      overflow: hidden;
+    }
+    * {
+      font-family: Microsoft YaHei;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+    }
+    #go {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    #container {
+      height: 100%;
+      left: 0;
+      top: 0;
+      position: absolute;
+      z-index: 2;
+    }
+    #container div {
+      position: absolute;
+      transition: left 2s linear, top 2s linear, right 2s linear, bottom 2s linear;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  </style>
+  <body>
+    <div id="go" onclick="onclickGo();">▶</div>
+    <div id="container"></div>
+    <script type="text/javascript">
+      function resize() {
+        var width = document.body.clientWidth
+        document.body.style.fontSize = width * 0.1 + "px"
+      }
+      window.onresize = resize
+      resize()
+
+      function onclickGo() {
+        var go = document.getElementById('go')
+        go.onclick = undefined
+        go.innerHTML = 3
+        var num = 3
+        function countDown() {
+          go.innerHTML = num;
+          --num
+        }
+        setTimeout(function() { go.innerHTML = 2 }, 1000)
+        setTimeout(function() { go.innerHTML = 1 }, 2000)
+        setTimeout(function() { go.innerHTML = "Go!" }, 3000)
+        setTimeout(function() {
+          go.style.visibility = "hidden"
+          go.innerHTML = "▶"
+          fly()
+        }, 4000)
+      }
+
+      function flyToRight(div, delay) {
+        var clientWidth = document.body.clientWidth
+        var clientHeight = document.body.clientHeight
+        var divWidth = div.offsetWidth
+        var divHeight = div.offsetHeight
+        div.style.left = '-' + divWidth + 'px'
+        div.style.top = (clientHeight - divHeight) * Math.random() + 'px'
+        setTimeout(function() {
+          div.style.left = clientWidth + divWidth + 'px'
+        }, delay)
+      }
+
+      function flyToLeft(div, delay) {
+        var clientWidth = document.body.clientWidth
+        var clientHeight = document.body.clientHeight
+        var divWidth = div.offsetWidth
+        var divHeight = div.offsetHeight
+        div.style.left = clientWidth + divWidth + 'px'
+        div.style.top = (clientHeight - divHeight) * Math.random() + 'px'
+        setTimeout(function() {
+          div.style.left = '-' + divWidth + 'px'
+        }, delay)
+      }
+
+      function flyToBottom(div, delay) {
+        var clientWidth = document.body.clientWidth
+        var clientHeight = document.body.clientHeight
+        var divWidth = div.offsetWidth
+        var divHeight = div.offsetHeight
+        div.style.top = '-' + divHeight + 'px'
+        div.style.left = (clientWidth - divWidth) * Math.random() + 'px'
+        setTimeout(function() {
+          div.style.top = clientHeight + divHeight + 'px'
+        }, delay)
+      }
+
+      function flyToTop(div, delay) {
+        var clientWidth = document.body.clientWidth
+        var clientHeight = document.body.clientHeight
+        var divWidth = div.offsetWidth
+        var divHeight = div.offsetHeight
+        div.style.top = clientHeight + divHeight + 'px'
+        div.style.left = (clientWidth - divWidth) * Math.random() + 'px'
+        setTimeout(function() {
+          div.style.top = '-' + divHeight + 'px'
+        }, delay)
+      }
+
+      function fly() {
+        var container = document.getElementById('container')
+
+        for (var i = 0; i < words.length; ++i) {
+          var div = document.createElement('div')
+          div.innerHTML = words[i]
+          container.appendChild(div)
+
+          var direct = Math.floor(4 * Math.random() % 4)
+          var delay = i * 2000
+          if (direct === 0) flyToTop(div, delay)
+          else if (direct === 1) flyToLeft(div, delay)
+          else if (direct === 2) flyToRight(div, delay)
+          else if (direct === 3) flyToBottom(div, delay)
+        }
+
+        setTimeout(function() {
+          var go = document.getElementById('go')
+          go.style.visibility = "visible"
+          go.onclick = onclickGo
+
+          var container = document.getElementById('container')
+          while(container.hasChildNodes()) container.removeChild(container.firstChild)
+        }, words.length*2000)
+      }
+    </script>
+  </body>
+</html>
+
+<!--
+  要求：
+  5种效果，4个方向飞入，淡入
+  随机效果
+  根据单词长度决定飞入时长
+  单词和中文之间可以换行
+
+ -->
