@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Kim's class</title>
     <meta name="charset" content="utf8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no">
   </head>
   <script type="text/javascript">
+    // 这里设置单词，用单引号包起每个单词，并用逗号隔开
+    // 要换行的话，在换行处加上<br>
     var words = [
       'shit屎',
       'communication<br>交际',
@@ -13,6 +16,9 @@
       'swan天鹅',
       'love爱',
     ]
+
+    // 这里设置每个单词的显示间隔，单位毫秒
+    var interval = 3000
   </script>
   <style type="text/css">
     html,body {
@@ -47,9 +53,29 @@
     }
     #container div {
       position: absolute;
-      transition: left 2s linear, top 2s linear, right 2s linear, bottom 2s linear;
+      /* 这里设置飞进飞出的动画市场，s表示秒，可以是小数 */
+      transition: left 3s linear, top 3s linear, right 3s linear, bottom 3s linear;
       white-space: nowrap;
       overflow: hidden;
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+    .fadeInOut {
+      /* 这里设置淡出淡出动画的时长，s表示秒，可以是小数 */
+      animation: fadeInOut 3s;
     }
   </style>
   <body>
@@ -130,6 +156,19 @@
         }, delay)
       }
 
+      function fadeInOut(div, delay) {
+        var clientWidth = document.body.clientWidth
+        var clientHeight = document.body.clientHeight
+        var divWidth = div.offsetWidth
+        var divHeight = div.offsetHeight
+        div.style.opacity = 0
+        div.style.top = (clientHeight - divHeight) * Math.random() + 'px'
+        div.style.left = (clientWidth - divWidth) * Math.random() + 'px'
+        setTimeout(function() {
+          div.className = "fadeInOut"
+        }, delay)
+      }
+
       function fly() {
         var container = document.getElementById('container')
 
@@ -138,12 +177,13 @@
           div.innerHTML = words[i]
           container.appendChild(div)
 
-          var direct = Math.floor(4 * Math.random() % 4)
-          var delay = i * 2000
+          var direct = Math.floor(5 * Math.random() % 5)
+          var delay = i * interval
           if (direct === 0) flyToTop(div, delay)
           else if (direct === 1) flyToLeft(div, delay)
           else if (direct === 2) flyToRight(div, delay)
           else if (direct === 3) flyToBottom(div, delay)
+          else if (direct === 4) fadeInOut(div ,delay)
         }
 
         setTimeout(function() {
@@ -153,7 +193,7 @@
 
           var container = document.getElementById('container')
           while(container.hasChildNodes()) container.removeChild(container.firstChild)
-        }, words.length*2000)
+        }, words.length*interval)
       }
     </script>
   </body>
@@ -163,7 +203,7 @@
   要求：
   5种效果，4个方向飞入，淡入
   随机效果
-  根据单词长度决定飞入时长
+  根据单词长度决定飞入时长？
   单词和中文之间可以换行
 
  -->
